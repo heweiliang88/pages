@@ -22,31 +22,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. 使用 GitHub CLI 下载 Release 中的 page.zip 并解压
-      - name: Download and Unzip page.zip
+      # 2. 使用 GitHub CLI 下载 Release 中的 Pages.zip 并解压
+      - name: Download and Unzip Pages.zip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # 判断是手动触发还是自动触发，并执行对应的下载逻辑
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             if [ -n "${{ inputs.tag_name }}" ]; then
-              echo "手动触发：下载指定标签 ${{ inputs.tag_name }} 的 page.zip"
-              gh release download ${{ inputs.tag_name }} -p "page.zip"
+              echo "手动触发：下载指定标签 ${{ inputs.tag_name }} 的 Pages.zip"
+              gh release download ${{ inputs.tag_name }} -p "Pages.zip"
             else
-              echo "手动触发：未指定标签，正在下载最新 Release 的 page.zip"
+              echo "手动触发：未指定标签，正在下载最新 Release 的 Pages.zip"
               # 不加标签名，gh cli 默认拉取 latest
-              gh release download -p "page.zip"
+              gh release download -p "Pages.zip"
             fi
           else
-            echo "自动触发：下载当前发布标签 ${{ github.event.release.tag_name }} 的 page.zip"
-            gh release download ${{ github.event.release.tag_name }} -p "page.zip"
+            echo "自动触发：下载当前发布标签 ${{ github.event.release.tag_name }} 的 Pages.zip"
+            gh release download ${{ github.event.release.tag_name }} -p "Pages.zip"
           fi
           
           # 创建存放解压文件的目录
           mkdir dist
           
-          # 解压 zip 文件到 dist 目录 (已修正此处大小写，统一使用 page.zip)
-          unzip page.zip -d dist
+          # 解压 zip 文件到 dist 目录 (已修正此处大小写，统一使用 Pages.zip)
+          unzip Pages.zip -d dist
 
       # 3. 部署解压后的文件夹到 Cloudflare Pages
       - name: Deploy to Cloudflare Pages
